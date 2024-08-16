@@ -2,7 +2,7 @@
 
 
 # Copyright 2020 Open Source Robotics Foundation, Inc.
-# Copyright 2023 Michal Sojka <michal.sojka@cvut.cz>
+# Copyright 2023, 2024 Michal Sojka <michal.sojka@cvut.cz>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,7 +88,10 @@ def dump_bag(bag_path):
             file_map[topic] = file
 
         file = file_map[topic]
-        t = msg.header.stamp.sec + 1e-9*msg.header.stamp.nanosec
+        if hasattr(msg, "header"):
+            t = msg.header.stamp.sec + 1e-9*msg.header.stamp.nanosec
+        else:
+            t = ts
         if start_time is None:
             start_time = t
         print(','.join([str(t - start_time)] +
