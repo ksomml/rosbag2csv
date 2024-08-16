@@ -44,14 +44,20 @@ def get_rosbag_options(path, serialization_format='cdr'):
 
 
 def _gen_msg_values(msg, prefix=""):
-    for field, type in msg.get_fields_and_field_types().items():
-        full_field_name = prefix + "." + field if prefix else field
-        if "/" not in type:
-            yield full_field_name, getattr(msg, field)
-        else:
-            for key, val in _gen_msg_values(getattr(msg, field),
-                                            prefix=full_field_name):
-                yield key, val
+    if isinstance(msg, list):
+        for i, val in enumerate(msg):
+            yield from _gen_msg_values(val, f"{prefix}[{i}]")
+    elif hasattr(msg, "get_fields_and_field_types"):
+        for field, type_ in msg.get_fields_and_field_types().items():
+            val = getattr(msg, field)
+            full_field_name = prefix + "." + field if prefix else field
+            if type_.startswith("sequence<"):
+                for i, aval in enumerate(val):
+                    yield from _gen_msg_values(aval, f"{full_field_name}[{i}]")
+            else:
+                yield from _gen_msg_values(val, full_field_name)
+    else:
+        yield prefix, msg
 
 
 def dump_bag(bag_path):
