@@ -50,7 +50,7 @@ def _gen_msg_values(msg, prefix=""):
             yield full_field_name, getattr(msg, field)
         else:
             for key, val in _gen_msg_values(getattr(msg, field),
-                                           prefix=full_field_name):
+                                            prefix=full_field_name):
                 yield key, val
 
 
