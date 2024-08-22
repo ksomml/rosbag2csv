@@ -5,9 +5,7 @@ Converts a ROS2 bag file (.db3) to a CSV file. One CSV file per topic is created
 
 ## Prerequisites
 
-- [Ubuntu Linux](https://www.releases.ubuntu.com/)
-- [ROS2](https://docs.ros.org/)
-
+- [ROS 2](https://docs.ros.org/) supported platform, such as [Ubuntu Linux](https://www.releases.ubuntu.com/)
 
 ## Usage
 
